@@ -10,3 +10,7 @@ id = "ce39a8a69ebc44abb0d518ce1a26fae7"
 AGENT_NAME = "HealthLog"
 AGENT_TONE = "empathetic, cautious, evidence-based"
 AGENT_AVATAR = "💊"
+
+[[kv_namespaces]]
+binding = "KG"
+id = "c7886204c80845c6b9568693ed277b75"

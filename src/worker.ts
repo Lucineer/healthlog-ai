@@ -1,3 +1,5 @@
+import { addNode, addEdge, traverse, crossDomainQuery, findPath, domainStats, getDomainNodes } from './lib/knowledge-graph.ts';
+import { loadSeedIntoKG, FLEET_REPOS, loadAllSeeds } from './lib/seed-loader.ts';
 // src/worker.ts — HealthLog AI Worker
 // Part of the Cocapn ecosystem at cocapn.ai
 import { loadBYOKConfig, callLLM, saveBYOKConfig, generateSetupHTML, type BYOKConfig, type LLMMessage } from './lib/byok.ts';
@@ -145,6 +147,21 @@ export default {
     const path = url.pathname;
 
     // Health check
+    // ── Knowledge Graph (Phase 4B) ──
+    if (path.startsWith('/api/kg')) {
+      const _kj = (d: any, s = 200) => new Response(JSON.stringify(d), { status: s, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      if (path === '/api/kg' && method === 'GET') return _kj({ domain: url.searchParams.get('domain') || 'healthlog-ai', nodes: await getDomainNodes(env, url.searchParams.get('domain') || 'healthlog-ai') });
+      if (path === '/api/kg/explore' && method === 'GET') {
+        const nid = url.searchParams.get('node');
+        if (!nid) return _kj({ error: 'node required' }, 400);
+        return _kj(await traverse(env, nid, parseInt(url.searchParams.get('depth') || '2'), url.searchParams.get('domain') || undefined));
+      }
+      if (path === '/api/kg/cross' && method === 'GET') return _kj({ query: url.searchParams.get('query') || '', domain: url.searchParams.get('domain') || 'healthlog-ai', results: await crossDomainQuery(env, url.searchParams.get('query') || '', url.searchParams.get('domain') || 'healthlog-ai') });
+      if (path === '/api/kg/domains' && method === 'GET') return _kj(await domainStats(env));
+      if (path === '/api/kg/sync' && method === 'POST') return _kj(await loadAllSeeds(env, FLEET_REPOS));
+      if (path === '/api/kg/seed' && method === 'POST') { const b = await request.json(); return _kj(await loadSeedIntoKG(env, b, b.domain || 'healthlog-ai')); }
+    }
+
     if (path === '/health') {
       return Response.json({ status: 'ok', agent: AGENT_NAME, domain: DOMAIN, timestamp: new Date().toISOString() });
     }
