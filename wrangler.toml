@@ -1,10 +1,11 @@
+account_id = "2bd99d5b13b2186382cd3dc995b0bb18"
 name = "healthlog-ai"
 main = "src/worker.ts"
 compatibility_date = "2024-01-01"
 
 [[kv_namespaces]]
-binding = "MEMORY"
-id = "ce39a8a69ebc44abb0d518ce1a26fae7"
+binding = "HEALTHLOG_KV"
+id = "526fcd4e482943f2bc9b958613dcd6fa"
 
 [vars]
 AGENT_NAME = "HealthLog"
