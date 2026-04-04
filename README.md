@@ -1,43 +1,111 @@
-# HEALTHLOG-AI
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Lucineer/capitaine/master/docs/capitaine-logo.jpg" alt="Capitaine" width="120">
+</p>
 
-> AI-powered health symptom tracker — log symptoms, track patterns, and get evidence-based insights — part of the [Cocapn](https://cocapn.ai) ecosystem
+<h1 align="center">healthlog-ai</h1>
 
-![Build](https://img.shields.io/badge/build-passing-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-blue)
+<p align="center">Health and wellness tracking vessel.</p>
 
-## Description
+<p align="center">
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#the-fleet">The Fleet</a> ·
+  <a href="https://github.com/Lucineer/healthlog-ai/issues">Issues</a>
+</p>
 
-AI-powered health symptom tracker — log symptoms, track patterns, and get evidence-based insights. Built as a Cloudflare Worker with BYOK (Bring Your Own Key) architecture.
+---
 
-## ✨ Features
+**Powered by [Capitaine](https://github.com/Lucineer/capitaine) · [Cocapn](https://github.com/Lucineer/cocapn)**
 
-Symptom logging with timestamps\n- Pattern recognition over time\n- Medication tracking\n- Doctor visit logs\n- Mood and energy tracking\n- Sleep quality correlation\n- Export health summaries
+The repo IS the agent. healthlog-ai is a cocapn vessel — a self-improving repository that runs on Cloudflare Workers, thinks with LLMs, and coordinates with the fleet through git.
 
-## 🚀 Getting Started
+## Quick Start
 
-1. Clone the repo
-2. `npm install`
-3. `cp .dev.vars.example .dev.vars` and add your KV namespace ID
-4. `npm run dev` to start locally
-5. Visit `/setup` to configure your LLM provider
+```bash
+# Fork and deploy
+gh repo fork Lucineer/healthlog-ai --clone
+cd healthlog-ai
+npx wrangler login
+echo "your-github-token" | npx wrangler secret put GITHUB_TOKEN
+echo "your-llm-key" | npx wrangler secret put DEEPSEEK_API_KEY
+npx wrangler deploy
+```
 
-## API Endpoints
+That's it. The vessel is alive.
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/health` | GET | Health check |
-| `/setup` | GET | BYOK setup wizard |
-| `/api/chat` | POST | Chat with the AI agent |
-| `/api/seed` | POST | Seed sample data |
-| `/api/symptoms` | GET | List all symptoms |
-| `/api/symptoms` | POST | Create a symptom |
-| `/api/symptoms/:id` | GET | Get a symptom |
-| `/api/symptoms/:id` | PATCH | Update a symptom |
-| `/api/symptoms/:id` | DELETE | Delete a symptom |
+## Features
+
+- **BYOK v2** — Zero keys in code. All API keys via Cloudflare Secrets Store.
+- **Multi-model** — DeepSeek, SiliconFlow, DeepInfra, Moonshot, z.ai, local models.
+- **Session memory** — Conversations persist and build context over time.
+- **PII safety** — Automatic detection and dehydration of sensitive data.
+- **Rate limiting** — Guest tokens per IP with configurable limits.
+- **Health checks** — Standard `/health` endpoint on all vessels.
+- **Fleet coordination** — CRP-39 protocol for trust, bonds, and events.
 
 ## Architecture
 
-Single Cloudflare Worker with inline HTML, BYOK LLM routing, and KV persistence. Zero runtime dependencies.
+Single-file Cloudflare Worker. Zero runtime dependencies. Inline HTML serving.
+
+```
+src/
+  worker.ts      # The hull — serves users, runs heartbeats
+lib/
+  byok.ts        # Multi-model routing (BYOK v2)
+  ...
+```
+
+## The Fleet
+
+healthlog-ai is one of 40+ autonomous vessels in the Lucineer fleet. Each vessel is a different domain of one intelligence.
+
+
+<details>
+<summary><strong>⚓ The Fleet</strong></summary>
+
+**Flagship vessels**
+
+- [cocapn.ai](https://github.com/Lucineer/capitaine)
+- [personallog.ai](https://github.com/Lucineer/personallog-ai)
+- [businesslog.ai](https://github.com/Lucineer/businesslog-ai)
+- [studylog.ai](https://github.com/Lucineer/studylog-ai)
+- [makerlog.ai](https://github.com/Lucineer/makerlog-ai)
+- [playerlog.ai](https://github.com/Lucineer/playerlog-ai)
+- [dmlog.ai](https://github.com/Lucineer/dmlog-ai)
+- [reallog.ai](https://github.com/Lucineer/reallog-ai)
+- [deckboss.ai](https://github.com/Lucineer/deckboss-ai)
+
+**Fleet services**
+
+- [Fleet Catalog](https://github.com/Lucineer/capitaine/blob/master/docs/fleet/FLEET.md)
+- [Git Agent (full)](https://github.com/Lucineer/git-agent)
+- [Cocapn Lite (minimal)](https://github.com/Lucineer/cocapn-lite)
+- [Fleet Orchestrator](https://github.com/Lucineer/fleet-orchestrator)
+- [Dead Reckoning Engine](https://github.com/Lucineer/dead-reckoning-engine)
+- [Dream Engine](https://github.com/Lucineer/dream-engine)
+- [Seed UI (5 layers)](https://github.com/Lucineer/seed-ui)
+
+**For power users**
+
+- [Cocapn Lite (tabula rasa)](https://github.com/Lucineer/cocapn-lite)
+- [Cocapn (core platform)](https://github.com/Lucineer/cocapn)
+- [ZeroClaw (framework)](https://github.com/Lucineer/zeroclaw)
+
+[View all 106 repos →](https://github.com/orgs/Lucineer/repositories)
+[Fleet manifest →](https://github.com/Lucineer/capitaine/blob/master/docs/fleet/FLEET.md)
+
+</details>
+
+
+## Philosophy
+
+> The repo is the agent. The agent is the repo. Intelligence crystallizes from fluid (LLM calls) to solid (code). The vessel becomes faster and cheaper as it becomes smarter.
+
+- **Fork-first** — Power users fork and customize. Casual users visit the domain.
+- **Pay-for-convenience** — We save you costs through bulk inference, not markups.
+- **Git as coordination** — Agents compete via PRs, not chat.
+- **Soft actualization** — Vessels evolve gently based on usage, not hard updates.
 
 ## License
 
-MIT
+MIT · Superinstance & Lucineer (DiGennaro et al.)
