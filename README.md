@@ -4,108 +4,91 @@
 
 <h1 align="center">healthlog-ai</h1>
 
-<p align="center">Health and wellness tracking vessel.</p>
+<p align="center">A private, self-hosted health tracking agent.</p>
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> ·
   <a href="#features">Features</a> ·
-  <a href="#the-fleet">The Fleet</a> ·
+  <a href="#why-this-exists">Why</a> ·
+  <a href="#limitations">Limitations</a> ·
+  <a href="https://healthlog-ai.casey-digennaro.workers.dev">Live Demo</a> ·
   <a href="https://github.com/Lucineer/healthlog-ai/issues">Issues</a>
 </p>
 
 ---
 
-**Powered by [Capitaine](https://github.com/Lucineer/capitaine) · [Cocapn](https://github.com/Lucineer/cocapn)**
+Most health apps are built for advertisers, not for you. They ask the same questions, forget your history, and lock your data in their cloud.
 
-The repo IS the agent. healthlog-ai is a cocapn vessel — a self-improving repository that runs on Cloudflare Workers, thinks with LLMs, and coordinates with the fleet through git.
+healthlog-ai is a forkable agent that runs on infrastructure you control. It logs workouts, meals, sleep, and mood. Without an LLM, it works as a silent tracker. With one, it can spot patterns over time.
+
+You fork it once. You run it. It stays yours.
+
+Powered by [Capitaine](https://github.com/Lucineer/capitaine) · Cocapn Fleet
+
+---
+
+## Why this exists
+
+This agent was built to run entirely on your infrastructure, with zero shared state. No central server, no hidden analytics.
+
+All logic lives in this repository. When you fork it, you get the entire application. You can modify it or turn it off. Your data is stored in your Cloudflare account and never leaves.
+
+It is part of the Cocapn Fleet: an open network of independent agents that only answer to their owners.
+
+## What makes this different
+
+1.  **Fork-first deployment.** There is no account system. You deploy to your own Cloudflare Worker. No one else can access your data.
+2.  **The repository is the agent.** Every commit is a potential upgrade. The agent can even propose improvements to itself.
+3.  **No data lock-in.** Logs are stored as structured JSON. Export them anytime.
+4.  **Model optional.** Use OpenAI, DeepSeek, a local model, or no LLM at all.
 
 ## Quick Start
 
+Fork this repository, then run:
+
 ```bash
-# Fork and deploy
 gh repo fork Lucineer/healthlog-ai --clone
 cd healthlog-ai
-npx wrangler login
-echo "your-github-token" | npx wrangler secret put GITHUB_TOKEN
-echo "your-llm-key" | npx wrangler secret put DEEPSEEK_API_KEY
 npx wrangler deploy
 ```
 
-That's it. The vessel is alive.
+Set API keys as Cloudflare Secrets if using an LLM. Your agent is online.
 
 ## Features
 
-- **BYOK v2** — Zero keys in code. All API keys via Cloudflare Secrets Store.
-- **Multi-model** — DeepSeek, SiliconFlow, DeepInfra, Moonshot, z.ai, local models.
-- **Session memory** — Conversations persist and build context over time.
-- **PII safety** — Automatic detection and dehydration of sensitive data.
-- **Rate limiting** — Guest tokens per IP with configurable limits.
-- **Health checks** — Standard `/health` endpoint on all vessels.
-- **Fleet coordination** — CRP-39 protocol for trust, bonds, and events.
+*   Operates as a plain tracker or with optional AI insights
+*   Zero API keys in source code; uses Cloudflare Secrets
+*   Compatible with major LLM providers and local models
+*   Session memory builds context over weeks
+*   Basic PII detection before LLM calls
+*   Built-in rate limiting and health checks
+*   Single file worker, no runtime dependencies, cold start under 10ms
+
+## Limitations
+
+Without an LLM, the agent provides only structured logging and basic data visualization. AI-powered insights require a configured model.
 
 ## Architecture
 
-Single-file Cloudflare Worker. Zero runtime dependencies. Inline HTML serving.
+This is a production agent, not a framework.
 
 ```
 src/
-  worker.ts      # The hull — serves users, runs heartbeats
+  worker.ts      # Serves UI, handles requests, manages fleet protocol
 lib/
-  byok.ts        # Multi-model routing (BYOK v2)
-  ...
+  byok.ts        # Multi-model routing
+  memory.ts      # Context window management
+  sanitize.ts    # Data cleaning and PII handling
 ```
 
-## The Fleet
+The entire application runs in a single Cloudflare Worker.
 
-healthlog-ai is one of 40+ autonomous vessels in the Lucineer fleet. Each vessel is a different domain of one intelligence.
+---
 
-
-<details>
-<summary><strong>⚓ The Fleet</strong></summary>
-
-**Flagship vessels**
-
-- [cocapn.ai](https://github.com/Lucineer/capitaine)
-- [personallog.ai](https://github.com/Lucineer/personallog-ai)
-- [businesslog.ai](https://github.com/Lucineer/businesslog-ai)
-- [studylog.ai](https://github.com/Lucineer/studylog-ai)
-- [makerlog.ai](https://github.com/Lucineer/makerlog-ai)
-- [playerlog.ai](https://github.com/Lucineer/playerlog-ai)
-- [dmlog.ai](https://github.com/Lucineer/dmlog-ai)
-- [reallog.ai](https://github.com/Lucineer/reallog-ai)
-- [deckboss.ai](https://github.com/Lucineer/deckboss-ai)
-
-**Fleet services**
-
-- [Fleet Catalog](https://github.com/Lucineer/capitaine/blob/master/docs/fleet/FLEET.md)
-- [Git Agent (full)](https://github.com/Lucineer/git-agent)
-- [Cocapn Lite (minimal)](https://github.com/Lucineer/cocapn-lite)
-- [Fleet Orchestrator](https://github.com/Lucineer/fleet-orchestrator)
-- [Dead Reckoning Engine](https://github.com/Lucineer/dead-reckoning-engine)
-- [Dream Engine](https://github.com/Lucineer/dream-engine)
-- [Seed UI (5 layers)](https://github.com/Lucineer/seed-ui)
-
-**For power users**
-
-- [Cocapn Lite (tabula rasa)](https://github.com/Lucineer/cocapn-lite)
-- [Cocapn (core platform)](https://github.com/Lucineer/cocapn)
-- [ZeroClaw (framework)](https://github.com/Lucineer/zeroclaw)
-
-[View all 106 repos →](https://github.com/orgs/Lucineer/repositories)
-[Fleet manifest →](https://github.com/Lucineer/capitaine/blob/master/docs/fleet/FLEET.md)
-
-</details>
-
-
-## Philosophy
-
-> The repo is the agent. The agent is the repo. Intelligence crystallizes from fluid (LLM calls) to solid (code). The vessel becomes faster and cheaper as it becomes smarter.
-
-- **Fork-first** — Power users fork and customize. Casual users visit the domain.
-- **Pay-for-convenience** — We save you costs through bulk inference, not markups.
-- **Git as coordination** — Agents compete via PRs, not chat.
-- **Soft actualization** — Vessels evolve gently based on usage, not hard updates.
-
-## License
-
-MIT · Superinstance & Lucineer (DiGennaro et al.)
+<div align="center">
+  <p>
+    Part of the <a href="https://the-fleet.casey-digennaro.workers.dev">Cocapn Fleet</a> · 
+    <a href="https://cocapn.ai">Cocapn</a> · 
+    Attribution: Superinstance & Lucineer (DiGennaro et al.)
+  </p>
+</div>
