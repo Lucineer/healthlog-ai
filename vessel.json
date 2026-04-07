@@ -6,9 +6,17 @@
   "category": "lifestyle",
   "description": "AI-powered Healthlog companion",
   "icon": "ship",
-  "endpoints": ["/", "/health", "/vessel.json"],
+  "endpoints": [
+    "/",
+    "/health",
+    "/vessel.json"
+  ],
   "deployment": {
     "platform": "cloudflare-workers",
     "url": "https://healthlog-ai.casey-digennaro.workers.dev"
-  }
+  },
+  "capabilities": [
+    "health-tracking",
+    "wellness-monitoring"
+  ]
 }
